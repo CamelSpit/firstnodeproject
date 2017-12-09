@@ -1,8 +1,12 @@
 {
   "name": "nodeproject",
   "version": "0.1.0",
+  "main": "server/server.js",
   "private": true,
   "dependencies": {
+    "axios": "^0.17.1",
+    "cors": "^2.8.4",
+    "npm": "^5.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.0.17"
@@ -14,7 +18,7 @@
     "eject": "react-scripts eject"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
-  "main": "/server/server.js",
+  "proxy": "http://localhost:3008",
   "devDependencies": {},
   "repository": {
     "type": "git",
