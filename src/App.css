@@ -1,5 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+body {
+    font-family: "Oswald", sans-serif;
+    background-image: url("thunderdome.jpg");
+    text-shadow: -1px 0 #DAE108, 0 1px #DAE108, 1px 0 #DAE108, 0 -1px #DAE108;
+}
 
 
+header {
+    padding-top: 50px;
+    background: #D8D8D6;
+    opacity: 0.5;
+    padding-bottom: 20px;
+    text-shadow: -2px 0 #DAE108, 0 2px #DAE108, 2px 0 #DAE108, 0 -2px #DAE108;
+}
 h1 {
     font-size: 72px;
     text-align: center;
@@ -11,8 +24,9 @@ h2{
 }
 
 .inputs {
+    padding-top: 20px;
     width: 100vw;
-    height: 50px;
+    height: 70px;
     display: flex;
     justify-content: space-around;
 }
@@ -38,7 +52,63 @@ h2{
 }
 
 input {
+    border: 1px solid #DAE108;
     width: 50%;
     height: 20px;
     max-width: 150px;
+    font-family: "Oswald", sans-serif;
+}
+
+button {
+    border: 2px solid #DAE108;
+    font-family: "Oswald", sans-serif;
+}
+
+.generates {
+    width: 100vw;
+    height: 400px;
+    display: flex;
+    justify-content: space-around;
+    padding-top: 20px;
+}
+
+.fight {
+    display: flex;
+    justify-content: space-around;
+}
+
+.fight button {
+    width: 120px;
+    height: 40px;
+    font-size: 18px;
+}
+
+
+img {
+    max-width: 200px;
+    max-height: 200px;
+    background: white;
+    border: 2px solid yellow;
+}
+
+.image {
+    width: 200px;
+    height: 200px;
+    background: transparent;
+    transition: transform ease-in 2000ms;
+}
+
+.image:hover {
+    transform: translate(300px) rotate(360deg);
+}
+
+.image2 {
+    width: 200px;
+    height: 200px;
+    background: transparent;
+    transition: transform ease-in 2000ms;
+}
+
+.image2:hover {
+    transform: translate(-300px) rotate(-360deg);
 }

@@ -4,6 +4,9 @@ import './App.css';
 import Opponent1 from "./Components/Opponent1";
 import Opponent2 from "./Components/Opponent2";
 import axios from "axios";
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Dialog from 'material-ui/Dialog';
+
 
 class App extends Component {
   constructor(){
@@ -17,8 +20,13 @@ class App extends Component {
       loser: '',
       champion: '',
       joke: '',
-      monsterName: ''
+      monsterName: '',
+      open: false,
+      fight: false
     }
+
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
 updateName1 (newString){
@@ -45,7 +53,19 @@ updatephoto2(newurl){
   })
 }
 
+handleOpen = () => {
+  this.setState({open: true});
+};
+
+handleClose = () => {
+  this.setState({open: false});
+};
+
 fight(){
+  this.handleOpen();
+  this.setState({
+    fight: true
+  })
   let joke = axios.get(`	
   http://api.icndb.com/jokes/random?firstName=${this.state.name1}&amp;lastName=${this.state.monsterName}`).then(res=>{
     this.setState({
@@ -84,45 +104,61 @@ fight(){
     console.log(this.state.champion);
     console.log(this.state.loser);
     return (
-      <section>
-        <div>
-        <h1>Welcome to the THUNDERDOME!</h1>
-        <h2>Two men enter. One man leaves...</h2>
-        </div>
+      <MuiThemeProvider>
+        <section>
+          <header>
+          <div>
+          <h1>Welcome to the THUNDERDOME!</h1>
+          <h2>Two men enter. One man leaves...</h2>
+          </div>
+          </header>
 
-        <section className="topSection">
-          <div className="inputs">
-          <div className="input1">
-            <input placeholder="Insert Name" onChange={event=>this.updateName1(event.target.value)}/>
-            <input placeholder="Insert Photo URL" onChange={event=>this.updatephoto1(event.target.value)}/>
-          </div>
+          <section className="topSection">
+            <div className="inputs">
+            <div className="input1">
+              <input placeholder="Insert Name" onChange={event=>this.updateName1(event.target.value)}/>
+              <input placeholder="Insert Photo URL" onChange={event=>this.updatephoto1(event.target.value)}/>
+            </div>
 
-          <div className="input2"> 
-            <input placeholder="Insert Name" onChange={event=>this.updateName2(event.target.value)}/>
-            <input placeholder="Insert Photo URL" onChange={event=>this.updatephoto2(event.target.value)}/>
-          </div>
-          </div>
+            <div className="input2"> 
+              <input placeholder="Insert Name" onChange={event=>this.updateName2(event.target.value)}/>
+              <input placeholder="Insert Photo URL" onChange={event=>this.updatephoto2(event.target.value)}/>
+            </div>
+            </div>
+
+          </section>
+
+          <section>
+            <div className="generates">
+            <Opponent1 name={this.state.name1} photo={this.state.photo1}/>
+            <Opponent2 name={this.state.name2} photo={this.state.photo2} fight={this.state.fight}/>
+            </div>
+
+            <div className="fight">
+              <button onClick={event=>this.fight()}>FIGHT!</button>
+                  <Dialog
+                    title="Dialog With Actions"
+                    // actions={actions}
+                    // modal={true}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                  >
+                  Only actions can close this dialog.
+                </Dialog>
+            </div>
+          </section>
 
           <div>
-            <button onClick={event=>this.fight()}>FIGHT!</button>
+            <p>
+            Champion: {this.state.champion} <br/>
+            {this.state.joke} <br/>
+            Loser: {this.state.loser} <br/>
+            </p>
           </div>
+
+
         </section>
-
-        <section>
-          <Opponent1 name={this.state.name1} photo={this.state.photo1}/>
-          <Opponent2 name={this.state.name2} photo={this.state.photo2}/>
-        </section>
-
-        <div>
-          <p>
-          Champion: {this.state.champion} <br/>
-          {this.state.joke} <br/>
-          Loser: {this.state.loser} <br/>
-          </p>
-        </div>
-
-
-      </section>
+      </MuiThemeProvider>
     );
   }
 }

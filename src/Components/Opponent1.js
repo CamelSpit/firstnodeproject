@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import axios from "axios";
+import "../App.css";
 
 class Opponent1 extends Component {
     constructor(){
@@ -37,7 +38,9 @@ class Opponent1 extends Component {
     render(){
         let op1 = (
             <div>
+                <div className="image">
                 <img src={this.props.photo} alt="This is the last face you will see."/>
+                </div>
                 <p>
                 Name: {this.props.name} <br/>
                 Monster Name: {this.state.monsterName} <br/>
