@@ -103,18 +103,18 @@ fight(){
     fight: true
   })
 
-      let pending = axios.get("/api/pending").then(res=>{
+      axios.get("/api/pending").then(res=>{
+        console.log(res);
         this.setState({
-        pendingStatus: pending
+        pendingStatus: res
        })
       }).catch(console.log());
-      console.log(pending);
 
   this.pendingBox();
 
   this.loserBox();
 
-  let joke = axios.get(`	
+  axios.get(`	
   http://api.icndb.com/jokes/random?firstName=${this.state.name1}&amp;lastName=${this.state.monsterName}`).then(res=>{
     this.setState({
       joke: res.data.value.joke
