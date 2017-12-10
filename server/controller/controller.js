@@ -1,4 +1,4 @@
-let pending = ['Checking pulses...','Wading through the carnage...','Looting the body…','Oh the horror!','Medic!'];
+let pending = ['...checking pulses...','Wading through the carnage...','Looting the body...','Oh the horror!','Medic!'];
 
 module.exports = {
    getPending: (req,res) => {
