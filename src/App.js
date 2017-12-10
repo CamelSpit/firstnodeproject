@@ -186,12 +186,11 @@ fight(){
                   {this.state.pendingStatus}
                 </Dialog>
 
-                <Dialog className="pendingDialogue"
+                <Dialog
                     title="You will ride eternal, shiny and CHROME!"
-                    open={this.state.loserOpen}
+                    open={this.state.openLoser}
                     onRequestClose={this.handleClose}
                   >
-                  {this.state.pendingStatus}
                 </Dialog>
 
             </div>
