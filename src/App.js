@@ -6,6 +6,7 @@ import Opponent2 from "./Components/Opponent2";
 import axios from "axios";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
+import { setTimeout } from 'timers';
 
 
 class App extends Component {
@@ -30,6 +31,11 @@ class App extends Component {
 
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.loserBox = this.loserBox.bind(this);
+    this.loserOpen = this.loserOpen.bind(this);
+    this.loserClose = this.loserClose.bind(this);
+    this.championClose = this.championClose.bind(this);
+    this.championOpen = this.championOpen.bind(this);
   }
 
 updateName1 (newString){
@@ -72,7 +78,6 @@ pendingBox = () =>{
   setTimeout(
     this.handleClose, 5000
   );
-
 }
 
 loserOpen = () => {
@@ -93,8 +98,26 @@ loserBox(){
   );
 
   setTimeout(
-    this.loserClose, 8000
+    this.loserClose, 9000
   );  
+}
+
+championOpen(){
+  this.setState({
+    openChampion : true
+  })
+}
+
+championClose(){
+  this.setState({
+    openChampion : false
+  })
+}
+
+championBox(){
+  setTimeout (
+    this.championOpen, 8000
+  );
 }
 
 fight(){
@@ -113,6 +136,8 @@ fight(){
   this.pendingBox();
 
   this.loserBox();
+
+  this.championBox();
 
   axios.get(`	
   http://api.icndb.com/jokes/random?firstName=${this.state.name1}&amp;lastName=${this.state.monsterName}`).then(res=>{
@@ -193,18 +218,15 @@ fight(){
                   >
                 </Dialog>
 
+                <Dialog
+                    title="The champion is..."
+                    open={this.state.openChampion}
+                    onRequestClose={this.championClose}
+                  >
+                </Dialog>
+
             </div>
           </section>
-
-          <div>
-            <p>
-            Champion: {this.state.champion} <br/>
-            {this.state.joke} <br/>
-            Loser: {this.state.loser} <br/>
-            </p>
-          </div>
-
-
         </section>
       </MuiThemeProvider>
     );

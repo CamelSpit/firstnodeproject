@@ -20,7 +20,7 @@ class Opponent1 extends Component {
 
     generate(){
         let id = Math.floor(Math.random()*100) + 1;
-        axios.get(`http://pokeapi.co/api/v2/pokemon/${id}`).then(res=>{
+        axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`).then(res=>{
             this.setState({
                     id: res.data.id,
                     name: res.data.name, 
