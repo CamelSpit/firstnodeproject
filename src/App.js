@@ -77,13 +77,13 @@ pendingBox = () =>{
 
 loserOpen = () => {
   this.setState ({
-    loserOpen: true
+    openLoser: true
   })
 }
 
 loserClose = () => {
   this.setState ({
-    loserOpen: false
+    openLoser: false
   })
 }
 
@@ -106,7 +106,7 @@ fight(){
       axios.get("/api/pending").then(res=>{
         console.log(res);
         this.setState({
-        pendingStatus: res
+        pendingStatus: res.data
        })
       }).catch(console.log());
 
@@ -189,7 +189,7 @@ fight(){
                 <Dialog
                     title="You will ride eternal, shiny and CHROME!"
                     open={this.state.openLoser}
-                    onRequestClose={this.handleClose}
+                    onRequestClose={this.loserClose}
                   >
                 </Dialog>
 
