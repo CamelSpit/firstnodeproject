@@ -23,7 +23,9 @@ class App extends Component {
       monsterName: '',
       open: false,
       fight: false,
-      pendingStatus: ''
+      pendingStatus: '',
+      openLoser: false,
+      openChampion: false
     }
 
     this.handleOpen = this.handleOpen.bind(this);
@@ -73,13 +75,33 @@ pendingBox = () =>{
 
 }
 
+loserOpen = () => {
+  this.setState ({
+    loserOpen: true
+  })
+}
+
+loserClose = () => {
+  this.setState ({
+    loserOpen: false
+  })
+}
+
+loserBox(){
+  setTimeout(
+    this.loserOpen, 5000
+  );
+
+  setTimeout(
+    this.loserClose, 8000
+  );  
+}
+
 fight(){
 
   this.setState({
     fight: true
   })
-
-  this.pendingBox();
 
       let pending = axios.get("/api/pending").then(res=>{
         this.setState({
@@ -87,6 +109,10 @@ fight(){
        })
       }).catch(console.log());
       console.log(pending);
+
+  this.pendingBox();
+
+  this.loserBox();
 
   let joke = axios.get(`	
   http://api.icndb.com/jokes/random?firstName=${this.state.name1}&amp;lastName=${this.state.monsterName}`).then(res=>{
@@ -151,6 +177,7 @@ fight(){
 
             <div className="fight">
               <button onClick={event=>this.fight()}>FIGHT!</button>
+
                   <Dialog className="pendingDialogue"
                     title="The fight commences..."
                     open={this.state.open}
@@ -158,6 +185,15 @@ fight(){
                   >
                   {this.state.pendingStatus}
                 </Dialog>
+
+                <Dialog className="pendingDialogue"
+                    title="You will ride eternal, shiny and CHROME!"
+                    open={this.state.loserOpen}
+                    onRequestClose={this.handleClose}
+                  >
+                  {this.state.pendingStatus}
+                </Dialog>
+
             </div>
           </section>
 
