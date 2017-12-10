@@ -22,7 +22,8 @@ class App extends Component {
       joke: '',
       monsterName: '',
       open: false,
-      fight: false
+      fight: false,
+      pendingStatus: ''
     }
 
     this.handleOpen = this.handleOpen.bind(this);
@@ -61,17 +62,39 @@ handleClose = () => {
   this.setState({open: false});
 };
 
+pendingBox = () =>{
+  setTimeout(
+    this.handleOpen, 2000
+  );
+
+  setTimeout(
+    this.handleClose, 5000
+  );
+
+}
+
 fight(){
-  this.handleOpen();
+
   this.setState({
     fight: true
   })
+
+  this.pendingBox();
+
+      let pending = axios.get("/api/pending").then(res=>{
+        this.setState({
+        pendingStatus: pending
+       })
+      }).catch(console.log());
+      console.log(pending);
+
   let joke = axios.get(`	
   http://api.icndb.com/jokes/random?firstName=${this.state.name1}&amp;lastName=${this.state.monsterName}`).then(res=>{
     this.setState({
       joke: res.data.value.joke
     })
   })
+
   let ap1 = Math.floor(Math.random()*300) + 1;
   let ap2 = Math.floor(Math.random()*300) + 1;
   var loser = '';
@@ -85,12 +108,6 @@ fight(){
     loser = this.state.name1;
     champion = this.state.name2;
   }
-  console.log(loser);
-  console.log(champion);
-
-  axios.get("/api/pending").then(res=>{
-    console.log(res)
-    }).catch(console.log());
 
   setTimeout(() =>{
   this.setState({
@@ -101,8 +118,6 @@ fight(){
 }
 
   render() {
-    console.log(this.state.champion);
-    console.log(this.state.loser);
     return (
       <MuiThemeProvider>
         <section>
@@ -130,20 +145,18 @@ fight(){
 
           <section>
             <div className="generates">
-            <Opponent1 name={this.state.name1} photo={this.state.photo1}/>
+            <Opponent1 name={this.state.name1} photo={this.state.photo1} fight={this.state.fight}/>
             <Opponent2 name={this.state.name2} photo={this.state.photo2} fight={this.state.fight}/>
             </div>
 
             <div className="fight">
               <button onClick={event=>this.fight()}>FIGHT!</button>
-                  <Dialog
-                    title="Dialog With Actions"
-                    // actions={actions}
-                    // modal={true}
+                  <Dialog className="pendingDialogue"
+                    title="The fight commences..."
                     open={this.state.open}
                     onRequestClose={this.handleClose}
                   >
-                  Only actions can close this dialog.
+                  {this.state.pendingStatus}
                 </Dialog>
             </div>
           </section>

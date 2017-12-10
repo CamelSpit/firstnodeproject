@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import axios from "axios";
 import "../App.css";
+import styles from "../styles.js";
 
 class Opponent1 extends Component {
     constructor(){
@@ -38,7 +39,7 @@ class Opponent1 extends Component {
     render(){
         let op1 = (
             <div>
-                <div className="image">
+                <div style={Object.assign({}, styles.image1, this.props.fight && styles.image1.hover)}>
                 <img src={this.props.photo} alt="This is the last face you will see."/>
                 </div>
                 <p>
