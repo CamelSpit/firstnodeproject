@@ -1,36 +1,58 @@
-//if this.props.champion === "", don't do anything. once it's populated, can do a check on teh array to see if a put or post request should be done. 
+import React, { Component } from "react";
+import axios from "axios";
+import { setTimeout } from "timers";
 
-axios.get("/api/champions").then(res=>{
-    console.log(res);
-    var champsarray = res.data;
-})
 
-function PP (tempvar){
-    champsarray.map((champion, index)=> {
-        if (champsarray.indexOf(champion.name)!==-1){
-            let id = index;
-            axios.put(`/api/champions/${name}/${id}`).then(res=>{
-               return console.log(res);
+class ChampUpdate extends Component {
+    constructor(){
+        super()
+
+        this.state = {
+            champsarray: []
+        }
+    }
+
+    componentWillReceiveProps(newProps){
+        console.log('new props yo', newProps)
+        if (newProps.exist) {
+            // this.getChamps()
+            // this.PP()
+            // this.getChamps()
+        }
+    }
+
+   getChamps= ()=>{ axios.get("/api/champions").then(res=>{
+        console.log(res);
+        this.setState ({
+            champsarray: res.data
+        })
+        })
+    }
+
+    PP = () => {
+        
+            let name = this.props.championName;
+            this.state.champsarray.map((champion, index)=> {
+                if (this.state.champsarray.indexOf(name)!==-1){
+                    let id = index;
+                    axios.put(`/api/champions/${name}/${id}`).then(res=>{
+                       return console.log(res);
+                    })
+                }
+        
+            })
+        
+            axios.post(`/api/champion/${name}`).then(res=>{
+                return console.log(res);
             })
         }
 
-    })
+render(){
 
-    axios.post(`/api/champion/${name}`).then(res=>{
-        return console.log(res);
-    })
+return(
+    <p>{JSON.stringify(this.state.champsarray)}</p>
+)
+}
 }
 
-
-
-
-
-putChampion: (req, res) => {
-    let name = req.params.name;
-    champions.map((champion, index)=> {
-         if (champion.name===name) {
-             return champions.push({name: name, wins: champions[index].wins+1 });
-         }
-    })
- return champions.push({name : name, wins : 1});
-},
+export default ChampUpdate;

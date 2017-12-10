@@ -44,8 +44,7 @@ class Opponent2 extends Component {
                 <img src={this.props.photo} alt="This is the last face you will see."/>
                 </div>
                 <p>
-                Name: {this.props.name} <br/>
-                {/* Monster Name: {this.state.monsterName} <br/> */}
+                Name: {this.props.name}<br/>
                 Base XP:{this.state.baseXP}<br/>
                 Height: {this.state.height}<br/>
                 Weight: {this.state.weight}<br/>

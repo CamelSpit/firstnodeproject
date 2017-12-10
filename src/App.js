@@ -23,7 +23,6 @@ class App extends Component {
       loser: '',
       champion: '',
       joke: '',
-      monsterName: '',
       open: false,
       fight: false,
       pendingStatus: '',
@@ -31,7 +30,7 @@ class App extends Component {
       openChampion: false,
       champPhoto :'',
       loserPhoto : '',
-      logoDisplay: false
+      champsarray: []
     }
 
     this.handleOpen = this.handleOpen.bind(this);
@@ -103,7 +102,7 @@ loserBox(){
   );
 
   setTimeout(
-    this.loserClose, 9000
+    this.loserClose,10000
   );  
 }
 
@@ -121,8 +120,52 @@ championClose(){
 
 championBox(){
   setTimeout (
-    this.championOpen, 8000
+    this.championOpen, 10000
   );
+}
+
+getChamps= ()=>{
+  axios.get("/api/champions").then(res=>{
+    console.log(res);
+    this.setState ({
+        champsarray: res.data
+    })
+    console.log(this.state.champion, this.state.champsarray);
+    let name = this.state.champion;
+    let flag = false;
+    this.state.champsarray.map((champion, index)=> {
+      if (champion.name===this.state.loser)
+        axios.delete(`/api/champion/${index}`).then(res=>{
+          console.log(res);
+        })
+      if (champion.name===name){
+        flag = true;
+        console.log("same champ");
+          let id = index;
+          axios.put(`/api/champions/${name}/${id}`).then(res=>{
+            axios.get("/api/champions").then(res=>{
+              console.log('145', res);
+              this.setState({
+                  champsarray: res.data
+              })
+              return console.log(res);
+            })
+          })
+        }
+      });
+
+    if (!flag) {
+      axios.post(`/api/champion/${name}`).then(res=>{
+        axios.get("/api/champions").then(res=>{
+          console.log('158', res);
+          this.setState ({
+              champsarray: res.data
+          });
+        return console.log(res);
+        })
+      })
+    }
+  });
 }
 
 fight(){
@@ -151,17 +194,10 @@ fight(){
 
   this.championBox();
 
-  axios.get(`	
-  http://api.icndb.com/jokes/random?firstName=${this.state.name1}&amp;lastName=${this.state.monsterName}`).then(res=>{
-    this.setState({
-      joke: res.data.value.joke
-    })
-  })
-
   let ap1 = Math.floor(Math.random()*300) + 1;
   let ap2 = Math.floor(Math.random()*300) + 1;
   var loser = '';
-  var champion = '';
+  var champion = "";
   var champPhoto = "";
   var loserPhoto = "";
 
@@ -170,6 +206,7 @@ fight(){
     loser = this.state.name2;
     champPhoto = this.state.photo1;
     loserPhoto = this.state.photo2;
+    console.log(champion);
 
   }
   else {
@@ -177,15 +214,24 @@ fight(){
     champion = this.state.name2;
     champPhoto = this.state.photo2;
     loserPhoto = this.state.photo1;
+    console.log(champion);
   }
-
-  setTimeout(() =>{
+ 
+  axios.get(`http://api.icndb.com/jokes/random?firstName=${champion}&amp;lastName=nothing`).then(res=>{
+    let index = res.data.value.joke.indexOf("Norris");
+    let firstpart = res.data.value.joke.substring(0, index);
+    let secondpart= res.data.value.joke.substring(index+6,);
+    let joke = firstpart+secondpart;
   this.setState({
-    loser: loser,
-    champion: champion,
-    champPhoto : champPhoto,
-    loserPhoto: loserPhoto
-  })},5000)
+      joke: joke,
+      loser: loser,
+      champion: champion,
+      champPhoto : champPhoto,
+      loserPhoto: loserPhoto
+    })
+    this.getChamps();
+  })
+
 
 }
 
@@ -195,7 +241,7 @@ fight(){
         <section>
           <header>
           <div>
-          <h1>Welcome to the THUNDERDOME!</h1>
+          <h1>Welcome to the THUNDERDOME!</h1><br/>
           <h2>Two men enter. One man leaves...</h2>
           </div>
           </header>
@@ -203,12 +249,12 @@ fight(){
           <section className="topSection">
             <div className="inputs">
             <div className="input1">
-              <input placeholder="Insert Name" onChange={event=>this.updateName1(event.target.value)}/>
+              <input placeholder="Insert First Name" onChange={event=>this.updateName1(event.target.value)}/>
               <input placeholder="Insert Photo URL" onChange={event=>this.updatephoto1(event.target.value)}/>
             </div>
 
             <div className="input2"> 
-              <input placeholder="Insert Name" onChange={event=>this.updateName2(event.target.value)}/>
+              <input placeholder="Insert First Name" onChange={event=>this.updateName2(event.target.value)}/>
               <input placeholder="Insert Photo URL" onChange={event=>this.updatephoto2(event.target.value)}/>
             </div>
             </div>
@@ -224,7 +270,7 @@ fight(){
             <div className="fight">
               <button onClick={event=>this.fight()}>FIGHT!</button>
                   
-                  <Dialog className="pendingDialogue"
+                  <Dialog className="pendingDialog"
                     title="The fight commences..."
                     open={this.state.open}
                     onRequestClose={this.handleClose}
@@ -233,12 +279,16 @@ fight(){
                 </Dialog>
 
                 <Dialog className="loser"
-                    title="You will ride eternal, shiny and CHROME!"
+                    title= " The loser is..."
                     open={this.state.openLoser}
                     onRequestClose={this.loserClose}
                   >
-                  <Chromelogo display={this.state.logoDisplay}/>
-                  <img src={this.state.loserPhoto} alt="LLama face"/>
+                  
+                  <p>{this.state.loser}!<br/><br/>
+                  {`${this.state.loser} will ride eternal, shiny and CHROME!`}</p>
+                  <img src={chrome}/>
+                  {/* <Chromelogo lphoto={this.state.loserPhoto}/> */}
+                  {/* <img src={this.state.loserPhoto} alt="LLama face"/> */}
                 </Dialog>
 
                 <Dialog className="champion"
@@ -246,12 +296,16 @@ fight(){
                     open={this.state.openChampion}
                     onRequestClose={this.championClose}
                   >
-                  <p>{this.state.champion}! <br/>
+                  <p>{this.state.champion}! <br/> <br/>
                   {this.state.joke}
                   </p>
                   <img src = {this.state.champPhoto} alt="Look at that beautiful mug!"/>
                 </Dialog>
 
+            </div>
+            <div>
+              {JSON.stringify(this.state.champsarray)}
+              {/* <ChampUpdate championName={this.state.champion} exist={this.state.championExist}/> */}
             </div>
           </section>
         </section>

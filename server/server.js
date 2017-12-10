@@ -10,7 +10,8 @@ const Controller = require("./controller/controller.js");
 
 app.get("/api/pending", Controller.getPending);
 app.put("/api/champions/:name/:id", Controller.putChampion);
-app.get("/api/champions", getChamps);
-app.post("/api/champion/:name", postChamp);
+app.get("/api/champions", Controller.getChamps);
+app.post("/api/champion/:name", Controller.postChamp);
+app.delete('/api/champion/:id', Controller.deleteChamp);
 
 app.listen(port, ()=> console.log(`Big Brother is listening on port ${port}.`))

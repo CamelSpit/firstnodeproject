@@ -90,15 +90,15 @@ img {
     border: 2px solid yellow;
 }
 
-.pendingDialogue {
+.pendingDialog{
     text-align: center;
 }
 
-.loser {
-
+.loser{
+    text-align: center;
 }
 
-.champion img{
-    margin: auto;
+.champion{
+    text-align: center;
 }
 
