@@ -7,6 +7,8 @@ import axios from "axios";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
 import { setTimeout } from 'timers';
+import chrome from "./chrome.png";
+import Chromelogo from "./Components/Chromelogo";
 
 
 class App extends Component {
@@ -26,7 +28,10 @@ class App extends Component {
       fight: false,
       pendingStatus: '',
       openLoser: false,
-      openChampion: false
+      openChampion: false,
+      champPhoto :'',
+      loserPhoto : '',
+      logoDisplay: false
     }
 
     this.handleOpen = this.handleOpen.bind(this);
@@ -126,6 +131,7 @@ fight(){
     fight: true
   })
 
+
       axios.get("/api/pending").then(res=>{
         console.log(res);
         this.setState({
@@ -136,6 +142,12 @@ fight(){
   this.pendingBox();
 
   this.loserBox();
+
+  setTimeout(
+    this.setState({
+      logoDisplay : true
+    }), 9000
+  )
 
   this.championBox();
 
@@ -150,20 +162,29 @@ fight(){
   let ap2 = Math.floor(Math.random()*300) + 1;
   var loser = '';
   var champion = '';
+  var champPhoto = "";
+  var loserPhoto = "";
 
   if (ap1>ap2) {
     champion = this.state.name1;
     loser = this.state.name2;
+    champPhoto = this.state.photo1;
+    loserPhoto = this.state.photo2;
+
   }
   else {
     loser = this.state.name1;
     champion = this.state.name2;
+    champPhoto = this.state.photo2;
+    loserPhoto = this.state.photo1;
   }
 
   setTimeout(() =>{
   this.setState({
     loser: loser,
-    champion: champion
+    champion: champion,
+    champPhoto : champPhoto,
+    loserPhoto: loserPhoto
   })},5000)
 
 }
@@ -202,7 +223,7 @@ fight(){
 
             <div className="fight">
               <button onClick={event=>this.fight()}>FIGHT!</button>
-
+                  
                   <Dialog className="pendingDialogue"
                     title="The fight commences..."
                     open={this.state.open}
@@ -211,18 +232,24 @@ fight(){
                   {this.state.pendingStatus}
                 </Dialog>
 
-                <Dialog
+                <Dialog className="loser"
                     title="You will ride eternal, shiny and CHROME!"
                     open={this.state.openLoser}
                     onRequestClose={this.loserClose}
                   >
+                  <Chromelogo display={this.state.logoDisplay}/>
+                  <img src={this.state.loserPhoto} alt="LLama face"/>
                 </Dialog>
 
-                <Dialog
+                <Dialog className="champion"
                     title="The champion is..."
                     open={this.state.openChampion}
                     onRequestClose={this.championClose}
                   >
+                  <p>{this.state.champion}! <br/>
+                  {this.state.joke}
+                  </p>
+                  <img src = {this.state.champPhoto} alt="Look at that beautiful mug!"/>
                 </Dialog>
 
             </div>

@@ -3,6 +3,7 @@ import axios from "axios";
 import "../App.css";
 import styles from "../styles.js";
 
+
 class Opponent1 extends Component {
     constructor(){
         super()
@@ -44,7 +45,7 @@ class Opponent1 extends Component {
                 </div>
                 <p>
                 Name: {this.props.name} <br/>
-                Monster Name: {this.state.monsterName} <br/>
+                {/* Monster Name: {this.state.monsterName} <br/> */}
                 Base XP:{this.state.baseXP}<br/>
                 Height: {this.state.height}<br/>
                 Weight: {this.state.weight}<br/>
